@@ -32,5 +32,60 @@ const {
   </head>
   <body class="font-geist antialiased">
     <slot />
+
+    <!-- Background music -->
+    <audio id="bg-music" src="/music.mp3" loop preload="auto"></audio>
+
+    <!-- Music toggle button -->
+    <button
+      id="music-btn"
+      aria-label="Хөгжим нэвтрүүлэх"
+      title="Хөгжим нэвтрүүлэх"
+      class="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300"
+      style="background:rgba(11,13,17,0.7);backdrop-filter:blur(20px);border:1px solid rgba(0,229,255,0.25);box-shadow:inset 1px 1px 0 rgba(0,229,255,0.3),0 4px 20px rgba(0,0,0,0.5);"
+    >
+      <span id="music-icon" class="material-symbols-outlined text-primary text-[20px] select-none">music_note</span>
+    </button>
+
+    <script>
+      const audio = document.getElementById('bg-music') as HTMLAudioElement;
+      const btn   = document.getElementById('music-btn') as HTMLButtonElement;
+      const icon  = document.getElementById('music-icon') as HTMLElement;
+
+      let playing = false;
+
+      function setPlaying(on: boolean) {
+        playing = on;
+        icon.textContent = on ? 'music_note' : 'music_off';
+        btn.style.borderColor = on ? 'rgba(0,229,255,0.25)' : 'rgba(255,255,255,0.1)';
+      }
+
+      // Attempt autoplay once page fully loads
+      window.addEventListener('load', () => {
+        audio.volume = 0.45;
+        audio.play().then(() => {
+          setPlaying(true);
+        }).catch(() => {
+          // Blocked by browser — resume on first user interaction
+          setPlaying(false);
+          const resume = () => {
+            audio.play().then(() => setPlaying(true)).catch(() => {});
+          };
+          document.addEventListener('click', resume, { once: true });
+          document.addEventListener('keydown', resume, { once: true });
+        });
+      });
+
+      // Manual toggle
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (playing) {
+          audio.pause();
+          setPlaying(false);
+        } else {
+          audio.play().then(() => setPlaying(true)).catch(() => {});
+        }
+      });
+    </script>
   </body>
 </html>
