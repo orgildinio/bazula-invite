@@ -1,0 +1,129 @@
+---
+---
+
+<section
+  id="hero"
+  class="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6 text-center overflow-hidden"
+>
+  <div class="nebula-bg fixed inset-0 -z-10 pointer-events-none" id="nebula"></div>
+
+  <!-- Logo emblem -->
+  <div class="relative group">
+    <div
+      class="absolute inset-0 bg-primary-container/20 rounded-full blur-[80px]
+             group-hover:bg-primary-container/30 transition-all duration-700"
+    ></div>
+    <div class="relative z-10 logo-unboxing">
+      <div class="ring-expansion"></div>
+      <div class="w-40 h-40 md:w-60 md:h-60 rounded-full overflow-hidden rim-light shadow-[0_0_40px_rgba(0,229,255,0.2)]">
+        <img
+          src="/logo.jpg"
+          alt="20 Anniversary Friends 1996-2006"
+          class="w-full h-full object-cover"
+          width="240"
+          height="240"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Headline -->
+  <div class="mt-12 space-y-5 max-w-5xl relative z-20">
+    <h1
+      class="font-sora font-extrabold text-headline-lg-mobile md:text-display-hero uppercase tracking-tighter text-white leading-tight"
+    >
+      УВС АЙМГИЙН ӨНДӨРХАНГАЙ СУМЫН ДУНД СУРГУУЛИЙГ<br class="hidden md:block" />
+      <span class="text-secondary">1996&ndash;2006 онд</span>&nbsp;СУРАЛЦСАН АНД НАЙЗУУДЫН<br class="hidden md:block" />
+      20 ЖИЛИЙН ОЙН АРГА ХЭМЖЭЭ
+    </h1>
+    <p class="font-jetbrains text-utility-mono tracking-[0.2em] uppercase text-silver-metallic">
+      2026 оны 6-р сарын 19&ndash;21 &bull; Улаанбаатар, Монгол
+    </p>
+  </div>
+
+  <!-- Scroll CTA -->
+  <button
+    class="mt-16 flex flex-col items-center gap-4 group cursor-pointer relative z-20 border-none bg-transparent"
+    onclick="document.getElementById('schedule')?.scrollIntoView({ behavior: 'smooth' })"
+    aria-label="Хөтөлбөр үзэх"
+  >
+    <span class="text-label-caps font-label-caps text-on-surface-variant group-hover:text-primary transition-colors uppercase tracking-widest">
+      Хөтөлбөр үзэх
+    </span>
+    <div class="w-px h-16 bg-gradient-to-b from-primary to-transparent animate-pulse"></div>
+  </button>
+</section>
+
+<script>
+  // Floating gold star particles
+  const hero = document.getElementById('hero')!;
+  const goldPalette = ['#ffd700','#e9c349','#f4b942','#ffed85','#c9a227','#ffe066'];
+  const starClip = 'polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)';
+  for (let i = 0; i < 31; i++) {
+    const p = document.createElement('div');
+    const size = Math.random() * 6 + 3;
+    const color = goldPalette[Math.floor(Math.random() * goldPalette.length)];
+    const floatDur = (Math.random() * 6 + 5).toFixed(1);
+    const twinkleDur = (Math.random() * 3 + 2).toFixed(1);
+    p.style.cssText = [
+      'position:absolute', 'pointer-events:none', 'z-index:1',
+      `width:${size}px`, `height:${size}px`,
+      `background-color:${color}`,
+      `clip-path:${starClip}`,
+      `left:${Math.random() * 100}%`, `top:${Math.random() * 100}%`,
+      `opacity:${(Math.random() * 0.6 + 0.2).toFixed(2)}`,
+      `animation:float-particle ${floatDur}s infinite linear alternate, twinkle ${twinkleDur}s ease-in-out infinite`,
+    ].join(';');
+    hero.appendChild(p);
+  }
+
+  // Mouse-tracking nebula glow
+  const nebula = document.getElementById('nebula')!;
+  window.addEventListener('mousemove', (e) => {
+    const x = ((e.clientX / window.innerWidth) * 100).toFixed(1);
+    const y = ((e.clientY / window.innerHeight) * 100).toFixed(1);
+    nebula.style.background =
+      `radial-gradient(circle at ${x}% ${y}%, rgba(0,229,255,0.12) 0%, transparent 60%)`;
+  });
+
+  // Custom cursor (pointer-capable devices only)
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cursor = document.createElement('div');
+    Object.assign(cursor.style, {
+      width: '20px', height: '20px',
+      background: 'rgba(0,229,255,0.25)',
+      border: '1.5px solid #00e5ff',
+      borderRadius: '50%',
+      position: 'fixed',
+      pointerEvents: 'none',
+      zIndex: '10000',
+      transform: 'translate(-50%,-50%)',
+      transition: 'transform 0.1s ease-out, width 0.2s, height 0.2s, background 0.2s',
+      boxShadow: '0 0 12px rgba(0,229,255,0.5)',
+    });
+    document.body.appendChild(cursor);
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, button, input, select, .glass-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+        cursor.style.background = 'rgba(0,229,255,0.08)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+        cursor.style.background = 'rgba(0,229,255,0.25)';
+      });
+    });
+  }
+</script>
+
+<style>
+  .nebula-bg {
+    background: radial-gradient(circle at 50% 50%, rgba(0,229,255,0.1) 0%, transparent 60%);
+  }
+</style>

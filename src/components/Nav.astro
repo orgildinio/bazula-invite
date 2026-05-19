@@ -1,0 +1,67 @@
+---
+---
+
+<nav
+  id="main-nav"
+  class="fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-margin-desktop py-4
+         bg-obsidian/40 backdrop-blur-[30px] border-b border-white/10"
+  style="box-shadow: inset 0 -1px 0 rgba(0,229,255,0.15);"
+>
+  <a href="#hero" class="text-headline-md font-headline-md font-bold text-primary tracking-tight hover:opacity-80 transition-opacity">
+    ХӨТӨЛБӨР
+  </a>
+
+  <!-- Desktop links -->
+  <div class="hidden md:flex gap-8 items-center">
+    <a href="#schedule" class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">
+      Хөтөлбөр
+    </a>
+    <a href="#venue" class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">
+      Хаяг
+    </a>
+  </div>
+
+  <!-- Mobile hamburger -->
+  <button
+    id="mobile-menu-btn"
+    class="md:hidden text-primary p-2"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+  >
+    <span class="material-symbols-outlined" id="menu-icon">menu</span>
+  </button>
+</nav>
+
+<!-- Mobile menu drawer -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-40 bg-obsidian/95 backdrop-blur-[40px] flex flex-col items-center justify-center gap-10
+         opacity-0 pointer-events-none transition-opacity duration-300"
+>
+  <a href="#schedule" class="mobile-nav-link text-headline-lg font-headline-lg text-on-surface hover:text-primary transition-colors">Хөтөлбөр</a>
+  <a href="#venue"    class="mobile-nav-link text-headline-lg font-headline-lg text-on-surface hover:text-primary transition-colors">Хаяг</a>
+</div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const icon = document.getElementById('menu-icon')!;
+  let open = false;
+
+  btn.addEventListener('click', () => {
+    open = !open;
+    menu.classList.toggle('opacity-0', !open);
+    menu.classList.toggle('pointer-events-none', !open);
+    icon.textContent = open ? 'close' : 'menu';
+    btn.setAttribute('aria-expanded', String(open));
+  });
+
+  menu.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      open = false;
+      menu.classList.add('opacity-0', 'pointer-events-none');
+      icon.textContent = 'menu';
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
